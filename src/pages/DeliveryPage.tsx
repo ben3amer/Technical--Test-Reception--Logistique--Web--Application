@@ -21,8 +21,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { getDelivery, receiveCarton, receivePallet, receiveProduct, unreceiveProduct } from '../api/delivery';
 import type { ReceptionStatus } from '../types/delivery';
 
-const ORDER_ID = 'CMD-2026';
-
 const statusColor = (status: ReceptionStatus) => {
   if (status === 'Received') return 'success';
   if (status === 'PartiallyReceived') return 'warning';
@@ -35,20 +33,24 @@ const statusLabel = (status: ReceptionStatus) => {
   return 'Non reçu';
 };
 
-export default function DeliveryPage() {
+interface Props {
+  orderId: string;
+}
+
+export default function DeliveryPage({ orderId }: Props) {
   const queryClient = useQueryClient();
 
   const { data: delivery, isLoading, isError } = useQuery({
-    queryKey: ['delivery', ORDER_ID],
-    queryFn: () => getDelivery(ORDER_ID),
+    queryKey: ['delivery', orderId],
+    queryFn: () => getDelivery(orderId),
   });
 
-  const invalidate = () => queryClient.invalidateQueries({ queryKey: ['delivery', ORDER_ID] });
+  const invalidate = () => queryClient.invalidateQueries({ queryKey: ['delivery', orderId] });
 
-  const palletMutation = useMutation({ mutationFn: (palletId: string) => receivePallet(ORDER_ID, palletId), onSuccess: invalidate });
-  const cartonMutation = useMutation({ mutationFn: ({ palletId, cartonId }: { palletId: string; cartonId: string }) => receiveCarton(ORDER_ID, palletId, cartonId), onSuccess: invalidate });
-  const productReceive = useMutation({ mutationFn: ({ palletId, cartonId, ref }: { palletId: string; cartonId: string; ref: string }) => receiveProduct(ORDER_ID, palletId, cartonId, ref), onSuccess: invalidate });
-  const productUnreceive = useMutation({ mutationFn: ({ palletId, cartonId, ref }: { palletId: string; cartonId: string; ref: string }) => unreceiveProduct(ORDER_ID, palletId, cartonId, ref), onSuccess: invalidate });
+  const palletMutation = useMutation({ mutationFn: (palletId: string) => receivePallet(orderId, palletId), onSuccess: invalidate });
+  const cartonMutation = useMutation({ mutationFn: ({ palletId, cartonId }: { palletId: string; cartonId: string }) => receiveCarton(orderId, palletId, cartonId), onSuccess: invalidate });
+  const productReceive = useMutation({ mutationFn: ({ palletId, cartonId, ref }: { palletId: string; cartonId: string; ref: string }) => receiveProduct(orderId, palletId, cartonId, ref), onSuccess: invalidate });
+  const productUnreceive = useMutation({ mutationFn: ({ palletId, cartonId, ref }: { palletId: string; cartonId: string; ref: string }) => unreceiveProduct(orderId, palletId, cartonId, ref), onSuccess: invalidate });
 
   if (isLoading) return <Box display="flex" justifyContent="center" mt={8}><CircularProgress /></Box>;
   if (isError || !delivery) return <Typography color="error" mt={4} textAlign="center">Erreur de chargement de la commande.</Typography>;
