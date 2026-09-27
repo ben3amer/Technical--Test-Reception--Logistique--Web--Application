@@ -1,27 +1,35 @@
-import apiClient from './client';
-import type { DeliveryDto } from '../types/delivery';
+const BASE_URL = "https://localhost:7126/api/deliveries";
 
-export const getDelivery = async (orderId: string): Promise<DeliveryDto> => {
-  const { data } = await apiClient.get<DeliveryDto>(`/delivery/${orderId}`);
-  return data;
-};
+export async function getDelivery(orderId: string) {
+  const res = await fetch(`${BASE_URL}/${orderId}`);
+  if (!res.ok) throw new Error("Failed to fetch delivery");
+  return res.json();
+}
 
-export const receivePallet = async (orderId: string, palletId: string): Promise<DeliveryDto> => {
-  const { data } = await apiClient.post<DeliveryDto>(`/delivery/${orderId}/pallets/${palletId}/receive`);
-  return data;
-};
+export async function receivePallet(orderId: string, palletId: string) {
+  const res = await fetch(`${BASE_URL}/${orderId}/pallets/${palletId}/receive`, {
+    method: "POST",
+  });
+  if (!res.ok) throw new Error("Failed to receive pallet");
+}
 
-export const receiveCarton = async (orderId: string, palletId: string, cartonId: string): Promise<DeliveryDto> => {
-  const { data } = await apiClient.post<DeliveryDto>(`/delivery/${orderId}/pallets/${palletId}/cartons/${cartonId}/receive`);
-  return data;
-};
+export async function receiveCarton(orderId: string, palletId: string, cartonId: string) {
+  const res = await fetch(`${BASE_URL}/${orderId}/pallets/${palletId}/cartons/${cartonId}/receive`, {
+    method: "POST",
+  });
+  if (!res.ok) throw new Error("Failed to receive carton");
+}
 
-export const receiveProduct = async (orderId: string, palletId: string, cartonId: string, productRef: string): Promise<DeliveryDto> => {
-  const { data } = await apiClient.post<DeliveryDto>(`/delivery/${orderId}/pallets/${palletId}/cartons/${cartonId}/products/${productRef}/receive`);
-  return data;
-};
+export async function receiveProduct(orderId: string, palletId: string, cartonId: string, productRef: string) {
+  const res = await fetch(`${BASE_URL}/${orderId}/pallets/${palletId}/cartons/${cartonId}/products/${productRef}/receive`, {
+    method: "POST",
+  });
+  if (!res.ok) throw new Error("Failed to receive product");
+}
 
-export const unreceiveProduct = async (orderId: string, palletId: string, cartonId: string, productRef: string): Promise<DeliveryDto> => {
-  const { data } = await apiClient.delete<DeliveryDto>(`/delivery/${orderId}/pallets/${palletId}/cartons/${cartonId}/products/${productRef}/receive`);
-  return data;
-};
+export async function unreceiveProduct(orderId: string, palletId: string, cartonId: string, productRef: string) {
+  const res = await fetch(`${BASE_URL}/${orderId}/pallets/${palletId}/cartons/${cartonId}/products/${productRef}/unreceive`, {
+    method: "POST",
+  });
+  if (!res.ok) throw new Error("Failed to unreceive product");
+}
