@@ -35,9 +35,10 @@ const statusLabel = (status: ReceptionStatus) => {
 
 interface Props {
   orderId: string;
+  onReset: () => void;
 }
 
-export default function DeliveryPage({ orderId }: Props) {
+export default function DeliveryPage({ orderId, onReset }: Props) {
   const queryClient = useQueryClient();
 
   const { data: delivery, isLoading, isError } = useQuery({

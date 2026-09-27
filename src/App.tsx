@@ -36,9 +36,11 @@ export default function App() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && search()}
                 placeholder="Autre commande..."
-                InputProps={{
-                  startAdornment: <InputAdornment position="start"><SearchIcon sx={{ color: 'white', fontSize: 18 }} /></InputAdornment>,
-                  sx: { color: 'white', '& fieldset': { borderColor: 'rgba(255,255,255,0.4)' }, '&:hover fieldset': { borderColor: 'white' } },
+                slotProps={{
+                  input: {
+                    startAdornment: <InputAdornment position="start"><SearchIcon sx={{ color: 'white', fontSize: 18 }} /></InputAdornment>,
+                    sx: { color: 'white', '& fieldset': { borderColor: 'rgba(255,255,255,0.4)' }, '&:hover fieldset': { borderColor: 'white' } },
+                  }
                 }}
                 sx={{ width: 220 }}
               />
@@ -70,8 +72,10 @@ export default function App() {
                 placeholder="ex: CMD-2026"
                 fullWidth
                 autoFocus
-                InputProps={{
-                  startAdornment: <InputAdornment position="start"><SearchIcon color="action" /></InputAdornment>,
+                slotProps={{
+                  input: {
+                    startAdornment: <InputAdornment position="start"><SearchIcon color="action" /></InputAdornment>,
+                  }
                 }}
                 sx={{ mb: 2 }}
               />
